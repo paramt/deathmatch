@@ -14,7 +14,7 @@ public final class Deathmatch extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getLogger().info("Deathswap has been enabled!");
+        getLogger().info("Deathmatch has been enabled!");
         getCommand("deathmatch").setExecutor(new Commands(this));
         getServer().getPluginManager().registerEvents(new OnDeath(), this);
         getServer().getPluginManager().registerEvents(new OnPlayerJoin(this), this);
