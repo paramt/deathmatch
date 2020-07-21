@@ -34,6 +34,8 @@ public final class Deathmatch extends JavaPlugin {
         border.setDamageBuffer(0);
         border.setCenter(0, 0);
 
+        playerList = new ArrayList<>(Bukkit.getOnlinePlayers());
+
         for(Player player : playerList) {
             player.getInventory().clear();
 
@@ -64,6 +66,8 @@ public final class Deathmatch extends JavaPlugin {
     }
 
     private boolean sendTitleToEveryone(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        playerList = new ArrayList<>(Bukkit.getOnlinePlayers());
+
         for(Player player : playerList) {
             player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
         }
