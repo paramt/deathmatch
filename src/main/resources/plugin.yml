@@ -1,0 +1,11 @@
+name: Deathmatch
+version: ${project.version}
+main: me.param.plugins.deathmatch.Deathmatch
+api-version: 1.15
+authors: [Param]
+description: Fight to the death in this fast-paced minigame!
+website: www.param.me
+commands:
+  deathmatch:
+    description: Start or stop a Deathmatch game
+    usage: /<command> {start | stop}
