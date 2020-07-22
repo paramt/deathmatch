@@ -22,6 +22,8 @@ public final class Deathmatch extends JavaPlugin {
 
         getLogger().info("Deathmatch has been enabled!");
         getCommand("deathmatch").setExecutor(new Commands(this));
+        getCommand("deathmatch").setTabCompleter(new CommandsAutocompleter());
+
         getServer().getPluginManager().registerEvents(new OnDeath(), this);
         getServer().getPluginManager().registerEvents(new OnPlayerJoin(this), this);
         getServer().getPluginManager().registerEvents(new OnBreakBlock(this), this);
