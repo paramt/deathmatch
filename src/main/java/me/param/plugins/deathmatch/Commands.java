@@ -19,14 +19,14 @@ public class Commands implements CommandExecutor {
         }
 
         try {
-            if(args[0].toLowerCase().equals("start")) {
+            if(args[0].equalsIgnoreCase("start")) {
                 if(!game.inProgress)
                     game.start();
                 else
                     sender.sendMessage("The game is already in progress!");
                 return true;
 
-            } else if(args[0].toLowerCase().equals("stop")) {
+            } else if(args[0].equalsIgnoreCase("stop")) {
                 if(game.inProgress)
                     game.stop();
                 else
