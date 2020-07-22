@@ -11,9 +11,14 @@ import java.util.List;
 public final class Deathmatch extends JavaPlugin {
     public boolean inProgress = false;
     private List<Player> playerList = new ArrayList<>(Bukkit.getOnlinePlayers());
+    private World world;
+    private WorldBorder border;
 
     @Override
     public void onEnable() {
+        world = Bukkit.getWorld("world");
+        border = world.getWorldBorder();
+
         getLogger().info("Deathmatch has been enabled!");
         getCommand("deathmatch").setExecutor(new Commands(this));
         getServer().getPluginManager().registerEvents(new OnDeath(), this);
@@ -28,8 +33,6 @@ public final class Deathmatch extends JavaPlugin {
                 ChatColor.RESET + "Killing a player will give you " + ChatColor.GOLD +
                 "1 Golden Apple. " + ChatColor.RESET + "Last player standing wins!");
 
-        World world = Bukkit.getWorld("world");
-        WorldBorder border = world.getWorldBorder();
         border.setSize(100);
         border.setDamageBuffer(0);
         border.setCenter(0, 0);
@@ -57,8 +60,8 @@ public final class Deathmatch extends JavaPlugin {
 
     public void stop() {
         inProgress = false;
-
         Bukkit.broadcastMessage("The game has ended!");
+        border.setSize(30000000); //Reset worldborder
 
         for(Player player : playerList) {
             player.getInventory().clear();
