@@ -46,6 +46,7 @@ public final class Deathmatch extends JavaPlugin {
             player.teleport(new Location(world, 0, world.getHighestBlockYAt(0, 0), 0));
             player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
             player.sendTitle(ChatColor.RED + "Deathmatch", "", 10, 60, 10);
+            player.setGameMode(GameMode.SURVIVAL);
         }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
