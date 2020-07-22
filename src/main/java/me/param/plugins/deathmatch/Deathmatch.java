@@ -51,8 +51,10 @@ public final class Deathmatch extends JavaPlugin {
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             @Override
             public void run() {
-                border.setSize(10, 60*5);
-                sendTitleToEveryone("", "The border is shrinking!", 10, 60, 10);
+                if(inProgress) {
+                    border.setSize(10, 60*5);
+                    sendTitleToEveryone("", "The border is shrinking!", 10, 60, 10);
+                }
             }
         }, 20*60);
 
