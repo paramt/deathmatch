@@ -9,3 +9,8 @@ commands:
   deathmatch:
     description: Start or stop a Deathmatch game
     usage: /<command> {start | stop}
+
+permissions:
+  deathmatch.start:
+    description: Allows you to start or stop a Deathmatch game
+    default: op

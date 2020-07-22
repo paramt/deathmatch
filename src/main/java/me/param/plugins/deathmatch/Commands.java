@@ -13,6 +13,11 @@ public class Commands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if(!sender.hasPermission("deathmatch.start")) {
+            sender.sendMessage("You do not have the permission to run that command!");
+            return true;
+        }
+
         try {
             if(args[0].equals("start")) {
                 if(!game.inProgress)
