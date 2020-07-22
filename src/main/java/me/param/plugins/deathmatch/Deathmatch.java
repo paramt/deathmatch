@@ -43,6 +43,9 @@ public final class Deathmatch extends JavaPlugin {
 
         for(Player player : playerList) {
             player.getInventory().clear();
+            player.setHealth(20);
+            player.setFoodLevel(20);
+            player.setSaturation(5);
 
             //TODO randomize spawn locations
             player.teleport(new Location(world, 0, world.getHighestBlockYAt(0, 0), 0));
