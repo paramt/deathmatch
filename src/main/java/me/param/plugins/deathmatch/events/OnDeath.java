@@ -15,9 +15,12 @@ public class OnDeath implements Listener {
         Player player = event.getEntity();
         Player killer = event.getEntity().getKiller();
 
+        if(killer != null) {
+            player.teleport(killer.getLocation().add(0, 5, 0));
+            killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
+            killer.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 1);
+        }
+
         player.setGameMode(GameMode.SPECTATOR);
-        player.teleport(killer.getLocation().add(0, 5, 0));
-        killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
-        killer.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 1);
     }
 }
