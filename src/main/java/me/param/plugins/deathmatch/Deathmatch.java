@@ -2,6 +2,7 @@ package me.param.plugins.deathmatch;
 
 import me.param.plugins.deathmatch.events.OnBreakBlock;
 import me.param.plugins.deathmatch.events.OnDeath;
+import me.param.plugins.deathmatch.events.OnPlayerHit;
 import me.param.plugins.deathmatch.events.OnPlayerJoin;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -33,6 +34,7 @@ public final class Deathmatch extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnDeath(), this);
         getServer().getPluginManager().registerEvents(new OnPlayerJoin(this), this);
         getServer().getPluginManager().registerEvents(new OnBreakBlock(this), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerHit(), this);
     }
 
     public void start() {
