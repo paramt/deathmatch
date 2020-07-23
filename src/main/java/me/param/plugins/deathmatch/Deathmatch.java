@@ -63,7 +63,7 @@ public final class Deathmatch extends JavaPlugin {
             double x = Math.random() * borderSize - borderSize / 2.0;
             double z = Math.random() * borderSize - borderSize / 2.0;
 
-            player.teleport(new Location(world, x, world.getHighestBlockYAt((int) x, (int) z), z));
+            player.teleport(new Location(world, x, world.getHighestBlockYAt((int) x, (int) z) + 1, z));
             player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
             player.sendTitle(ChatColor.RED + "Deathmatch", "", 10, 60, 10);
             player.setGameMode(GameMode.SURVIVAL);
