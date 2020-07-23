@@ -45,7 +45,8 @@ public final class Deathmatch extends JavaPlugin {
                 ChatColor.RESET + "Killing a player will give you " + ChatColor.GOLD +
                 "1 Golden Apple. " + ChatColor.RESET + "Last player standing wins!");
 
-        border.setSize(100);
+        int borderSize = 200;
+        border.setSize(borderSize);
         border.setDamageBuffer(0);
         border.setCenter(0, 0);
 
@@ -60,7 +61,10 @@ public final class Deathmatch extends JavaPlugin {
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*60, 1));
 
             //TODO randomize spawn locations
-            player.teleport(new Location(world, 0, world.getHighestBlockYAt(0, 0), 0));
+            double x = Math.random() * borderSize - borderSize / 2.0;
+            double z = Math.random() * borderSize - borderSize / 2.0;
+
+            player.teleport(new Location(world, x, world.getHighestBlockYAt((int) x, (int) z), z));
             player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
             player.sendTitle(ChatColor.RED + "Deathmatch", "", 10, 60, 10);
             player.setGameMode(GameMode.SURVIVAL);
