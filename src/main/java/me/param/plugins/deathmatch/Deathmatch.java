@@ -51,13 +51,12 @@ public final class Deathmatch extends JavaPlugin {
         border.setCenter(0, 0);
 
         for(Player player : Bukkit.getOnlinePlayers()) {
-            // Clear inventory, reset health and food bars, apply 60 seconds of speed, give absorption hearts
-            // for 2 seconds to soak up any damage from the teleport
+            // Clear inventory, reset health and food bars, apply 60 seconds of speed and 5 seconds of invincibility
             player.getInventory().clear();
             player.setHealth(20);
             player.setFoodLevel(20);
             player.setSaturation(5);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*2, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 100));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*60, 1));
 
             //TODO randomize spawn locations
