@@ -6,12 +6,9 @@ import me.param.plugins.deathmatch.events.OnPlayerJoin;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class Deathmatch extends JavaPlugin {
     public boolean inProgress = false;
-    private List<Player> playerList = new ArrayList<>(Bukkit.getOnlinePlayers());
     private World world;
     private WorldBorder border;
     private int taskID;
@@ -42,9 +39,7 @@ public final class Deathmatch extends JavaPlugin {
         border.setDamageBuffer(0);
         border.setCenter(0, 0);
 
-        playerList = new ArrayList<>(Bukkit.getOnlinePlayers());
-
-        for(Player player : playerList) {
+        for(Player player : Bukkit.getOnlinePlayers()) {
             player.getInventory().clear();
             player.setHealth(20);
             player.setFoodLevel(20);
@@ -74,16 +69,14 @@ public final class Deathmatch extends JavaPlugin {
         Bukkit.broadcastMessage("The game has ended!");
         border.setSize(30000000); //Reset worldborder
 
-        for(Player player : playerList) {
+        for(Player player : Bukkit.getOnlinePlayers()) {
             player.getInventory().clear();
             player.setGameMode(GameMode.SPECTATOR);
         }
     }
 
     private boolean sendTitleToEveryone(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
-        playerList = new ArrayList<>(Bukkit.getOnlinePlayers());
-
-        for(Player player : playerList) {
+        for(Player player : Bukkit.getOnlinePlayers()) {
             player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
         }
 
