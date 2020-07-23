@@ -6,6 +6,8 @@ import me.param.plugins.deathmatch.events.OnPlayerJoin;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.*;
 
 public final class Deathmatch extends JavaPlugin {
@@ -50,10 +52,14 @@ public final class Deathmatch extends JavaPlugin {
         border.setCenter(0, 0);
 
         for(Player player : Bukkit.getOnlinePlayers()) {
+            // Clear inventory, reset health and food bars, apply 60 seconds of speed, give absorption hearts
+            // for 2 seconds to soak up any damage from the teleport
             player.getInventory().clear();
             player.setHealth(20);
             player.setFoodLevel(20);
             player.setSaturation(5);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20*2, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*60, 1));
 
             //TODO randomize spawn locations
             player.teleport(new Location(world, 0, world.getHighestBlockYAt(0, 0), 0));
