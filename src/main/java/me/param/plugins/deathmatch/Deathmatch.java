@@ -6,17 +6,23 @@ import me.param.plugins.deathmatch.events.OnPlayerJoin;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.*;
 
 public final class Deathmatch extends JavaPlugin {
     public boolean inProgress = false;
     private World world;
     private WorldBorder border;
+    private Scoreboard scoreboard;
     private int taskID;
 
     @Override
     public void onEnable() {
         world = Bukkit.getWorld("world");
         border = world.getWorldBorder();
+
+        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        Objective health = scoreboard.registerNewObjective("Health", Criterias.HEALTH, "Health", RenderType.HEARTS);
+        health.setDisplaySlot(DisplaySlot.PLAYER_LIST);
 
         getLogger().info("Deathmatch has been enabled!");
         getCommand("deathmatch").setExecutor(new Commands(this));
@@ -29,6 +35,10 @@ public final class Deathmatch extends JavaPlugin {
 
     public void start() {
         inProgress = true;
+
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            player.setScoreboard(scoreboard);
+        }
 
         Bukkit.broadcastMessage(ChatColor.BOLD + "" + ChatColor.RED + "Deathmatch Rules" +
                 "\n" + ChatColor.RESET + "Gather resources and fend off other players. " +
@@ -66,6 +76,11 @@ public final class Deathmatch extends JavaPlugin {
     public void stop() {
         inProgress = false;
         Bukkit.getServer().getScheduler().cancelTask(taskID);
+
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        }
+
         Bukkit.broadcastMessage("The game has ended!");
         border.setSize(30000000); //Reset worldborder
 
