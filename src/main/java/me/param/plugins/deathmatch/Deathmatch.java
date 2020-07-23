@@ -14,6 +14,7 @@ public final class Deathmatch extends JavaPlugin {
     private List<Player> playerList = new ArrayList<>(Bukkit.getOnlinePlayers());
     private World world;
     private WorldBorder border;
+    private int taskID;
 
     @Override
     public void onEnable() {
@@ -56,7 +57,7 @@ public final class Deathmatch extends JavaPlugin {
             player.setGameMode(GameMode.SURVIVAL);
         }
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+        taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             @Override
             public void run() {
                 if(inProgress) {
@@ -65,11 +66,11 @@ public final class Deathmatch extends JavaPlugin {
                 }
             }
         }, 20*60);
-
     }
 
     public void stop() {
         inProgress = false;
+        Bukkit.getServer().getScheduler().cancelTask(taskID);
         Bukkit.broadcastMessage("The game has ended!");
         border.setSize(30000000); //Reset worldborder
 
