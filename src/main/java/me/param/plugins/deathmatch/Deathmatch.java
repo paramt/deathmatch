@@ -39,6 +39,11 @@ public final class Deathmatch extends JavaPlugin {
     }
 
     public void start() {
+        if(Bukkit.getOnlinePlayers().size() < 2) {
+            Bukkit.broadcastMessage("There aren't enough players to start the game!");
+            return;
+        }
+
         inProgress = true;
         alivePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
 
