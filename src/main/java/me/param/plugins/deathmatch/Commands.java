@@ -1,5 +1,6 @@
 package me.param.plugins.deathmatch;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,10 +28,12 @@ public class Commands implements CommandExecutor {
                 return true;
 
             } else if(args[0].equalsIgnoreCase("stop")) {
-                if(game.inProgress)
+                if(game.inProgress) {
                     game.stop();
-                else
+                    Bukkit.broadcastMessage("The game has ended!");
+                } else {
                     sender.sendMessage("The game has not started yet!");
+                }
                 return true;
             }
         } catch (ArrayIndexOutOfBoundsException e) {

@@ -7,8 +7,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.*;
 import org.bukkit.scoreboard.*;
 
+import java.util.ArrayList;
+
 public final class Deathmatch extends JavaPlugin {
     public boolean inProgress = false;
+    public ArrayList<Player> alivePlayers;
+
     private World world;
     private WorldBorder border;
     private Scoreboard scoreboard;
@@ -27,7 +31,8 @@ public final class Deathmatch extends JavaPlugin {
         getCommand("deathmatch").setExecutor(new Commands(this));
         getCommand("deathmatch").setTabCompleter(new CommandsAutocompleter());
 
-        getServer().getPluginManager().registerEvents(new OnDeath(), this);
+        getServer().getPluginManager().registerEvents(new OnDeath(this), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerLeave(this), this);
         getServer().getPluginManager().registerEvents(new OnPlayerJoin(this), this);
         getServer().getPluginManager().registerEvents(new OnBreakBlock(this), this);
         getServer().getPluginManager().registerEvents(new OnPlayerHit(), this);
@@ -35,6 +40,8 @@ public final class Deathmatch extends JavaPlugin {
 
     public void start() {
         inProgress = true;
+        alivePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
+        System.out.println(alivePlayers);
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.setScoreboard(scoreboard);
@@ -83,12 +90,12 @@ public final class Deathmatch extends JavaPlugin {
     public void stop() {
         inProgress = false;
         Bukkit.getServer().getScheduler().cancelTask(taskID);
+        alivePlayers.clear();
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         }
 
-        Bukkit.broadcastMessage("The game has ended!");
         border.setSize(30000000); //Reset worldborder
 
         for(Player player : Bukkit.getOnlinePlayers()) {
@@ -97,7 +104,7 @@ public final class Deathmatch extends JavaPlugin {
         }
     }
 
-    private boolean sendTitleToEveryone(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+    public boolean sendTitleToEveryone(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
         }

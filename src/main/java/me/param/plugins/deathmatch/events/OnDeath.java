@@ -1,5 +1,7 @@
 package me.param.plugins.deathmatch.events;
 
+import me.param.plugins.deathmatch.Deathmatch;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -10,17 +12,49 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class OnDeath implements Listener {
+    private Deathmatch game;
+
+    public OnDeath(Deathmatch plugin) {
+        this.game = plugin;
+    }
+
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
+        if(!game.inProgress)
+            return;
+
         Player player = event.getEntity();
         Player killer = event.getEntity().getKiller();
+        player.setGameMode(GameMode.SPECTATOR);
 
-        if(killer != null) {
+        // Remove player from game.alivePlayers
+        for(int i = 0; i < game.alivePlayers.size(); i++) {
+            if(game.alivePlayers.get(i).equals(player)) {
+                game.alivePlayers.remove(i);
+                i--;
+            }
+        }
+
+        // End the game with a winner if only 1 player is alive
+        if(game.alivePlayers.size() == 1) {
+            game.stop();
+            String winner = game.alivePlayers.get(0).getDisplayName();
+            game.sendTitleToEveryone(ChatColor.GOLD + winner + ChatColor.RESET + " wins!",
+                    "", 10, 100, 10);
+        }
+
+        // End the game without a winner if 0 players are alive
+        else if(game.alivePlayers.size() == 0) {
+            game.stop();
+            game.sendTitleToEveryone(ChatColor.RED + "Game Over!", "Nobody wins",
+                    10, 100, 10);
+        }
+
+        // Reward the killer
+        else if(killer != null){
             player.teleport(killer.getLocation().add(0, 5, 0));
             killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
             killer.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 1);
         }
-
-        player.setGameMode(GameMode.SPECTATOR);
     }
 }
