@@ -37,8 +37,8 @@ public class OnDeath implements Listener {
 
         // End the game with a winner if only 1 player is alive
         if(game.alivePlayers.size() == 1) {
-            game.stop();
             String winner = game.alivePlayers.get(0).getDisplayName();
+            game.stop();
             game.sendTitleToEveryone(ChatColor.GOLD + winner + ChatColor.RESET + " wins!",
                     "", 10, 100, 10);
         }
