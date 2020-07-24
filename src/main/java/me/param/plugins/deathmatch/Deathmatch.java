@@ -41,7 +41,6 @@ public final class Deathmatch extends JavaPlugin {
     public void start() {
         inProgress = true;
         alivePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
-        System.out.println(alivePlayers);
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.setScoreboard(scoreboard);
