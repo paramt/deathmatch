@@ -70,7 +70,6 @@ public final class Deathmatch extends JavaPlugin {
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 100));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*60, 1));
 
-            //TODO randomize spawn locations
             double x = Math.random() * borderSize - borderSize / 2.0;
             double z = Math.random() * borderSize - borderSize / 2.0;
 
