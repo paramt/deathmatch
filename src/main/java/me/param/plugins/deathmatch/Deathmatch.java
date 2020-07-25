@@ -99,8 +99,10 @@ public final class Deathmatch extends JavaPlugin {
     public void stop(Player winner) {
         gameEndProcedure();
         sendTitleToEveryone(ChatColor.GOLD + winner.getDisplayName() + ChatColor.RESET + " wins!",
-                "", 10, 100, 10);
-        winner.playSound(winner.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1, 1);
+                "", 10, 200, 10);
+
+        for(Player player : Bukkit.getOnlinePlayers())
+            player.playSound(winner.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1, 1);
     }
 
     public boolean sendTitleToEveryone(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
