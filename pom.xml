@@ -6,7 +6,7 @@
 
     <groupId>me.param.plugins</groupId>
     <artifactId>Deathmatch</artifactId>
-    <version>0.3</version>
+    <version>0.4</version>
     <packaging>jar</packaging>
 
     <name>Deathmatch</name>
