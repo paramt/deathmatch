@@ -92,6 +92,27 @@ public final class Deathmatch extends JavaPlugin {
     }
 
     public void stop() {
+        gameEndProcedure();
+        sendTitleToEveryone(ChatColor.RED + "Game Over!", "Nobody wins",
+                10, 100, 10);
+    }
+
+    public void stop(Player winner) {
+        gameEndProcedure();
+        sendTitleToEveryone(ChatColor.GOLD + winner.getDisplayName() + ChatColor.RESET + " wins!",
+                "", 10, 100, 10);
+        winner.playSound(winner.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1, 1);
+    }
+
+    public boolean sendTitleToEveryone(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+        }
+
+        return true;
+    }
+
+    private void gameEndProcedure() {
         inProgress = false;
         Bukkit.getServer().getScheduler().cancelTask(taskID);
         alivePlayers.clear();
@@ -106,14 +127,6 @@ public final class Deathmatch extends JavaPlugin {
             player.getInventory().clear();
             player.setGameMode(GameMode.SPECTATOR);
         }
-    }
-
-    public boolean sendTitleToEveryone(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-        }
-
-        return true;
     }
 
 }

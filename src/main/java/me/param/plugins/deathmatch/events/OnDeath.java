@@ -35,19 +35,10 @@ public class OnDeath implements Listener {
             }
         }
 
-        // End the game with a winner if only 1 player is alive
+        // End the game if only 1 player is alive
         if(game.alivePlayers.size() == 1) {
-            String winner = game.alivePlayers.get(0).getDisplayName();
-            game.stop();
-            game.sendTitleToEveryone(ChatColor.GOLD + winner + ChatColor.RESET + " wins!",
-                    "", 10, 100, 10);
-        }
-
-        // End the game without a winner if 0 players are alive
-        else if(game.alivePlayers.size() == 0) {
-            game.stop();
-            game.sendTitleToEveryone(ChatColor.RED + "Game Over!", "Nobody wins",
-                    10, 100, 10);
+            Player winner = game.alivePlayers.get(0);
+            game.stop(winner);
         }
 
         // Reward the killer

@@ -28,16 +28,10 @@ public class OnPlayerLeave implements Listener {
             }
         }
 
-        // End the game with a winner if only 1 player is alive
+        // End the game if only 1 player is alive
         if(game.alivePlayers.size() == 1) {
-            String winner = game.alivePlayers.get(0).getDisplayName();
-            game.stop();
-            game.sendTitleToEveryone(ChatColor.GOLD + winner + " wins!", "", 10, 100, 10);
-        }
-
-        // End game the game without a winner if 0 players are alive
-        else if(game.alivePlayers.size() == 0) {
-            game.stop();
+            Player winner = game.alivePlayers.get(0);
+            game.stop(winner);
         }
 
     }
