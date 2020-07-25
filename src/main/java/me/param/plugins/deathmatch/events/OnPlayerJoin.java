@@ -1,6 +1,7 @@
 package me.param.plugins.deathmatch.events;
 
 import me.param.plugins.deathmatch.Deathmatch;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,7 +18,7 @@ public class OnPlayerJoin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if(game.inProgress) {
             event.getPlayer().setGameMode(GameMode.SPECTATOR);
-            event.getPlayer().sendMessage("The game is already in progress!");
+            event.getPlayer().sendMessage(ChatColor.RED + "The game is already in progress! You are spectating.");
         }
     }
 }

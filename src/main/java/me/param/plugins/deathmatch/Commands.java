@@ -1,6 +1,7 @@
 package me.param.plugins.deathmatch;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,7 +16,7 @@ public class Commands implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(!sender.hasPermission("deathmatch.start")) {
-            sender.sendMessage("You do not have the permission to run that command!");
+            sender.sendMessage(ChatColor.RED + "You don't have permission to run that command!");
             return true;
         }
 
@@ -24,15 +25,15 @@ public class Commands implements CommandExecutor {
                 if(!game.inProgress)
                     game.start();
                 else
-                    sender.sendMessage("The game is already in progress!");
+                    sender.sendMessage(ChatColor.RED + "The game is already in progress!");
                 return true;
 
             } else if(args[0].equalsIgnoreCase("stop")) {
                 if(game.inProgress) {
                     game.stop();
-                    Bukkit.broadcastMessage("The game has ended!");
+                    Bukkit.broadcastMessage(ChatColor.GREEN + "Stopped the game.");
                 } else {
-                    sender.sendMessage("The game has not started yet!");
+                    sender.sendMessage(ChatColor.RED + "The game has not started yet!");
                 }
                 return true;
             }
