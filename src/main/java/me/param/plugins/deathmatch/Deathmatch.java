@@ -67,6 +67,10 @@ public final class Deathmatch extends JavaPlugin {
             player.setHealth(20);
             player.setFoodLevel(20);
             player.setSaturation(5);
+
+            for(PotionEffect effect : player.getActivePotionEffects())
+                player.removePotionEffect(effect.getType());
+
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 100));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*60, 1));
 
