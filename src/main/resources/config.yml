@@ -1,0 +1,6 @@
+border:
+  size: 200
+  shrink size: 10
+  delay: 60
+
+minimum players: 2

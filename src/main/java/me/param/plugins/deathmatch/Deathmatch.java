@@ -20,6 +20,9 @@ public final class Deathmatch extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        getConfig().options().copyDefaults(true);
+        saveDefaultConfig();
+
         world = Bukkit.getWorld("world");
         border = world.getWorldBorder();
 
@@ -39,7 +42,7 @@ public final class Deathmatch extends JavaPlugin {
     }
 
     public void start() {
-        if(Bukkit.getOnlinePlayers().size() < 2) {
+        if(Bukkit.getOnlinePlayers().size() < getConfig().getInt("minimum players")) {
             Bukkit.broadcastMessage(ChatColor.RED + "There aren't enough players to start the game!");
             return;
         }
@@ -56,7 +59,7 @@ public final class Deathmatch extends JavaPlugin {
                 ChatColor.RESET + "Killing a player will give you " + ChatColor.GOLD +
                 "1 Golden Apple. " + ChatColor.RESET + "Last player standing wins!");
 
-        int borderSize = 200;
+        int borderSize = getConfig().getInt("border.size");
         border.setSize(borderSize);
         border.setDamageBuffer(0);
         border.setCenter(0, 0);
@@ -87,11 +90,11 @@ public final class Deathmatch extends JavaPlugin {
             @Override
             public void run() {
                 if(inProgress) {
-                    border.setSize(10, 60*5);
+                    border.setSize(getConfig().getInt("border.shrink size"), 60*5);
                     sendTitleToEveryone("", "The border is shrinking!", 10, 60, 10);
                 }
             }
-        }, 20*60);
+        }, 20*getConfig().getInt("border.delay"));
     }
 
     public void stop() {
