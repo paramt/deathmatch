@@ -41,6 +41,11 @@ public class OnDeath implements Listener {
             game.stop(winner);
         }
 
+        // End the game if no players are alive
+        else if(game.alivePlayers.size() == 0) {
+            game.stop();
+        }
+
         // Reward the killer
         else if(killer != null){
             player.teleport(killer.getLocation().add(0, 5, 0));

@@ -34,5 +34,10 @@ public class OnPlayerLeave implements Listener {
             game.stop(winner);
         }
 
+        // End the game if no players are alive
+        else if(game.alivePlayers.size() == 0) {
+            game.stop();
+        }
+
     }
 }
