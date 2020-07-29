@@ -12,11 +12,15 @@ import java.util.ArrayList;
 public final class Deathmatch extends JavaPlugin {
     public boolean inProgress = false;
     public ArrayList<Player> alivePlayers;
+    public Scoreboard scoreboard;
 
     private World world;
     private WorldBorder border;
-    private Scoreboard scoreboard;
-    private int taskID;
+    private Objective stats;
+    private Team countdownDisplay, borderSizeDisplay;
+
+    private int timeUntilNextEvent, delayTask, countdownTask;
+    private boolean statsRegistered, countdownDisplayRegistered, borderSizeDisplayRegistered = false;
 
     @Override
     public void onEnable() {
@@ -50,6 +54,41 @@ public final class Deathmatch extends JavaPlugin {
         inProgress = true;
         alivePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
 
+        stats = scoreboard.registerNewObjective("stats", "dummy",
+                ChatColor.GOLD + "DEATHMATCH");
+        statsRegistered = true;
+        stats.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+        countdownDisplay = scoreboard.registerNewTeam("countdown");
+        countdownDisplayRegistered = true;
+        countdownDisplay.addEntry("Border shrinks in: ");
+
+        borderSizeDisplay = scoreboard.registerNewTeam("border size");
+        borderSizeDisplayRegistered = true;
+        borderSizeDisplay.addEntry("Border size: ");
+
+        timeUntilNextEvent = getConfig().getInt("border.delay");
+        stats.getScore("Border size: ").setScore(2);
+        stats.getScore("Border shrinks in: ").setScore(1);
+
+        countdownTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
+            @Override
+            public void run() {
+                if(timeUntilNextEvent > 0) {
+                    scoreboard.getTeam("countdown").setSuffix(timeUntilNextEvent + "s");
+                    timeUntilNextEvent--;
+                } else {
+//                    countdown.unregister();
+//                    Bukkit.getScheduler().cancelTask(countdownTask);
+                    if(countdownDisplayRegistered)
+                        countdownDisplay.unregister();
+                        countdownDisplayRegistered = false;
+                    updateBorderSizeDisplay();
+                }
+            }
+        }, 0, 20);
+
+
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.setScoreboard(scoreboard);
         }
@@ -63,6 +102,7 @@ public final class Deathmatch extends JavaPlugin {
         border.setSize(borderSize);
         border.setDamageBuffer(0);
         border.setCenter(0, 0);
+        updateBorderSizeDisplay();
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             // Clear inventory, reset health and food bars, apply 60 seconds of speed and 5 seconds of invincibility
@@ -86,7 +126,7 @@ public final class Deathmatch extends JavaPlugin {
             player.setGameMode(GameMode.SURVIVAL);
         }
 
-        taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+        delayTask = Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             @Override
             public void run() {
                 if(inProgress) {
@@ -122,19 +162,43 @@ public final class Deathmatch extends JavaPlugin {
 
     private void gameEndProcedure() {
         inProgress = false;
-        Bukkit.getServer().getScheduler().cancelTask(taskID);
+
+        if(statsRegistered)
+            stats.unregister();
+
+        if(borderSizeDisplayRegistered)
+            borderSizeDisplay.unregister();
+
+        if(countdownDisplayRegistered)
+            countdownDisplay.unregister();
+
+        statsRegistered = false;
+        borderSizeDisplayRegistered = false;
+        countdownDisplayRegistered = false;
+
+        Bukkit.getServer().getScheduler().cancelTask(delayTask);
+        Bukkit.getServer().getScheduler().cancelTask(countdownTask);
+
         alivePlayers.clear();
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         }
 
-        border.setSize(30000000); //Reset worldborder
+        border.setSize(30000000); // Reset world border
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.getInventory().clear();
             player.setGameMode(GameMode.SPECTATOR);
         }
+    }
+
+    private void updateBorderSizeDisplay() {
+        if(!borderSizeDisplayRegistered)
+            return;
+
+        int size = (int) border.getSize();
+        scoreboard.getTeam("border size").setSuffix(size + ", " + size);
     }
 
 }

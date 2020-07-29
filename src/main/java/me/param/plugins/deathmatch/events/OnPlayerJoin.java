@@ -19,6 +19,7 @@ public class OnPlayerJoin implements Listener {
         if(game.inProgress) {
             event.getPlayer().setGameMode(GameMode.SPECTATOR);
             event.getPlayer().sendMessage(ChatColor.RED + "The game is already in progress! You are spectating.");
+            event.getPlayer().setScoreboard(game.scoreboard);
         }
     }
 }
