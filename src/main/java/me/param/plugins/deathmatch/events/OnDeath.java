@@ -35,6 +35,9 @@ public class OnDeath implements Listener {
             }
         }
 
+        // Remove player from scoreboard
+        game.scoreboard.resetScores(player.getDisplayName() + ": ");
+
         // End the game if only 1 player is alive
         if(game.alivePlayers.size() == 1) {
             Player winner = game.alivePlayers.get(0);
@@ -51,6 +54,7 @@ public class OnDeath implements Listener {
             player.teleport(killer.getLocation().add(0, 5, 0));
             killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
             killer.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 1);
+            game.updateKillCount(killer);
         }
     }
 }

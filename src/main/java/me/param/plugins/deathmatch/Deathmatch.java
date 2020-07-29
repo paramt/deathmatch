@@ -8,11 +8,13 @@ import org.bukkit.potion.*;
 import org.bukkit.scoreboard.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public final class Deathmatch extends JavaPlugin {
     public boolean inProgress = false;
     public ArrayList<Player> alivePlayers;
     public Scoreboard scoreboard;
+    public HashMap<String, Integer> kills = new HashMap<>();
 
     private World world;
     private WorldBorder border;
@@ -20,7 +22,7 @@ public final class Deathmatch extends JavaPlugin {
     private Team countdownDisplay, borderSizeDisplay;
 
     private int timeUntilNextEvent, delayTask, countdownTask;
-    private boolean statsRegistered, countdownDisplayRegistered, borderSizeDisplayRegistered = false;
+    private boolean countdownDisplayRegistered, borderSizeDisplayRegistered = false;
 
     @Override
     public void onEnable() {
@@ -56,41 +58,45 @@ public final class Deathmatch extends JavaPlugin {
 
         stats = scoreboard.registerNewObjective("stats", "dummy",
                 ChatColor.GOLD + "DEATHMATCH");
-        statsRegistered = true;
         stats.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         countdownDisplay = scoreboard.registerNewTeam("countdown");
-        countdownDisplayRegistered = true;
-        countdownDisplay.addEntry("Border shrinks in: ");
+        countdownDisplay.addEntry("Border");
 
         borderSizeDisplay = scoreboard.registerNewTeam("border size");
         borderSizeDisplayRegistered = true;
         borderSizeDisplay.addEntry("Border size: ");
 
         timeUntilNextEvent = getConfig().getInt("border.delay");
-        stats.getScore("Border size: ").setScore(2);
-        stats.getScore("Border shrinks in: ").setScore(1);
+        stats.getScore("Border size: ").setScore(4);
+        stats.getScore("Border").setScore(3);
+        stats.getScore("").setScore(2);
+        stats.getScore(ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Kills").setScore(1);
 
         countdownTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
             @Override
             public void run() {
                 if(timeUntilNextEvent > 0) {
-                    scoreboard.getTeam("countdown").setSuffix(timeUntilNextEvent + "s");
+                    scoreboard.getTeam("countdown").setSuffix(" shrinks in: " + timeUntilNextEvent + "s");
                     timeUntilNextEvent--;
                 } else {
-//                    countdown.unregister();
-//                    Bukkit.getScheduler().cancelTask(countdownTask);
-                    if(countdownDisplayRegistered)
-                        countdownDisplay.unregister();
-                        countdownDisplayRegistered = false;
+                    scoreboard.getTeam("countdown").setSuffix(" is shrinking!");
                     updateBorderSizeDisplay();
                 }
             }
         }, 0, 20);
 
+        for(int i = 0; i < alivePlayers.size(); i++) {
+            String playerName = alivePlayers.get(i).getDisplayName();
+            Team player = scoreboard.registerNewTeam(playerName);
+            player.addEntry(playerName + ": ");
+            stats.getScore(playerName + ": ").setScore(-i);
+            player.setSuffix("0");
+        }
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.setScoreboard(scoreboard);
+            kills.put(player.getDisplayName(), 0);
         }
 
         Bukkit.broadcastMessage(ChatColor.BOLD + "" + ChatColor.RED + "Deathmatch Rules" +
@@ -163,18 +169,13 @@ public final class Deathmatch extends JavaPlugin {
     private void gameEndProcedure() {
         inProgress = false;
 
-        if(statsRegistered)
-            stats.unregister();
+        for(Team team : scoreboard.getTeams()){
+            team.unregister();
+        }
 
-        if(borderSizeDisplayRegistered)
-            borderSizeDisplay.unregister();
+        stats.unregister();
 
-        if(countdownDisplayRegistered)
-            countdownDisplay.unregister();
-
-        statsRegistered = false;
         borderSizeDisplayRegistered = false;
-        countdownDisplayRegistered = false;
 
         Bukkit.getServer().getScheduler().cancelTask(delayTask);
         Bukkit.getServer().getScheduler().cancelTask(countdownTask);
@@ -201,4 +202,10 @@ public final class Deathmatch extends JavaPlugin {
         scoreboard.getTeam("border size").setSuffix(size + ", " + size);
     }
 
+    public void updateKillCount(Player player) {
+        int killCount = kills.get(player.getDisplayName()) + 1;
+        kills.put(player.getDisplayName(), killCount);
+
+        scoreboard.getTeam(player.getDisplayName()).setSuffix(Integer.toString(killCount));
+    }
 }
