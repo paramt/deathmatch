@@ -159,42 +159,6 @@ public final class Deathmatch extends JavaPlugin {
             player.playSound(winner.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1, 1);
     }
 
-    public boolean sendTitleToEveryone(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-        }
-
-        return true;
-    }
-
-    private void gameEndProcedure() {
-        inProgress = false;
-
-        for(Team team : scoreboard.getTeams()){
-            team.unregister();
-        }
-
-        stats.unregister();
-
-        borderSizeDisplayRegistered = false;
-
-        Bukkit.getServer().getScheduler().cancelTask(delayTask);
-        Bukkit.getServer().getScheduler().cancelTask(countdownTask);
-
-        alivePlayers.clear();
-
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        }
-
-        border.setSize(30000000); // Reset world border
-
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            player.getInventory().clear();
-            player.setGameMode(GameMode.SPECTATOR);
-        }
-    }
-
     public void handleDeath(Player player, Player killer) {
         player.setGameMode(GameMode.SPECTATOR);
 
@@ -240,4 +204,41 @@ public final class Deathmatch extends JavaPlugin {
         int size = (int) border.getSize();
         scoreboard.getTeam("border size").setSuffix(size + ", " + size);
     }
+
+    private boolean sendTitleToEveryone(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+        }
+
+        return true;
+    }
+
+    private void gameEndProcedure() {
+        inProgress = false;
+
+        for(Team team : scoreboard.getTeams()){
+            team.unregister();
+        }
+
+        stats.unregister();
+
+        borderSizeDisplayRegistered = false;
+
+        Bukkit.getServer().getScheduler().cancelTask(delayTask);
+        Bukkit.getServer().getScheduler().cancelTask(countdownTask);
+
+        alivePlayers.clear();
+
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        }
+
+        border.setSize(30000000); // Reset world border
+
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            player.getInventory().clear();
+            player.setGameMode(GameMode.SPECTATOR);
+        }
+    }
+
 }
