@@ -3,6 +3,7 @@ package me.param.plugins.deathmatch;
 import me.param.plugins.deathmatch.events.*;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.*;
 import org.bukkit.scoreboard.*;
@@ -194,18 +195,49 @@ public final class Deathmatch extends JavaPlugin {
         }
     }
 
+    public void handleDeath(Player player, Player killer) {
+        player.setGameMode(GameMode.SPECTATOR);
+
+        // Remove player from alivePlayers
+        for(int i = 0; i < alivePlayers.size(); i++) {
+            if(alivePlayers.get(i).equals(player)) {
+                alivePlayers.remove(i);
+                i--;
+            }
+        }
+
+        // Remove player from scoreboard
+        scoreboard.resetScores(player.getDisplayName() + ": ");
+
+        // End the game if only 1 player is alive
+        if(alivePlayers.size() == 1) {
+            Player winner = alivePlayers.get(0);
+            stop(winner);
+        }
+
+        // End the game if no players are alive
+        else if(alivePlayers.size() == 0) {
+            stop();
+        }
+
+        // Reward the player
+        else if(killer != null) {
+            player.teleport(killer.getLocation().add(0, 5, 0));
+            killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
+            killer.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1, 1);
+
+            // Update kill count
+            int killCount = kills.get(killer.getDisplayName()) + 1;
+            kills.put(killer.getDisplayName(), killCount);
+            scoreboard.getTeam(killer.getDisplayName()).setSuffix(Integer.toString(killCount));
+        }
+    }
+
     private void updateBorderSizeDisplay() {
         if(!borderSizeDisplayRegistered)
             return;
 
         int size = (int) border.getSize();
         scoreboard.getTeam("border size").setSuffix(size + ", " + size);
-    }
-
-    public void updateKillCount(Player player) {
-        int killCount = kills.get(player.getDisplayName()) + 1;
-        kills.put(player.getDisplayName(), killCount);
-
-        scoreboard.getTeam(player.getDisplayName()).setSuffix(Integer.toString(killCount));
     }
 }

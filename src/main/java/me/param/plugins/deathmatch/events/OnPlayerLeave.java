@@ -1,8 +1,6 @@
 package me.param.plugins.deathmatch.events;
 
 import me.param.plugins.deathmatch.Deathmatch;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,24 +18,8 @@ public class OnPlayerLeave implements Listener {
         if(!game.inProgress)
             return;
 
-        // Remove player from game.alivePlayers
-        for(int i = 0; i < game.alivePlayers.size(); i++) {
-            if(game.alivePlayers.get(i).equals(event.getPlayer())) {
-                game.alivePlayers.remove(i);
-                i--;
-            }
-        }
-
-        // End the game if only 1 player is alive
-        if(game.alivePlayers.size() == 1) {
-            Player winner = game.alivePlayers.get(0);
-            game.stop(winner);
-        }
-
-        // End the game if no players are alive
-        else if(game.alivePlayers.size() == 0) {
-            game.stop();
-        }
+        Player player = event.getPlayer();
+        game.handleDeath(player, null);
 
     }
 }
