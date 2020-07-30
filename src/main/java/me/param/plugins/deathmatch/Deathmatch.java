@@ -222,6 +222,7 @@ public final class Deathmatch extends JavaPlugin {
         stats.unregister();
 
         alivePlayers.clear();
+        kills.clear();
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
