@@ -86,16 +86,16 @@ public final class Deathmatch extends JavaPlugin {
         }, 0, 20);
 
         for(int i = 0; i < alivePlayers.size(); i++) {
+            Player player = alivePlayers.get(i);
             String playerName = alivePlayers.get(i).getDisplayName();
-            Team player = scoreboard.registerNewTeam(playerName);
-            player.addEntry(playerName + ": ");
-            stats.getScore(playerName + ": ").setScore(-i);
-            player.setSuffix("0");
-        }
+            Team playerTeam = scoreboard.registerNewTeam(playerName);
 
-        for(Player player : Bukkit.getOnlinePlayers()) {
+            playerTeam.addEntry(playerName + ": ");
+            stats.getScore(playerName + ": ").setScore(-i);
+            playerTeam.setSuffix("0");
+
             player.setScoreboard(scoreboard);
-            kills.put(player.getDisplayName(), 0);
+            kills.put(playerName, 0);
         }
 
         Bukkit.broadcastMessage(ChatColor.BOLD + "" + ChatColor.RED + "Deathmatch Rules" +
