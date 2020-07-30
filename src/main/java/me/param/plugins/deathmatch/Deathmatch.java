@@ -23,7 +23,6 @@ public final class Deathmatch extends JavaPlugin {
     private Team countdownDisplay, borderSizeDisplay;
 
     private int timeUntilNextEvent, delayTask, countdownTask;
-    private boolean countdownDisplayRegistered, borderSizeDisplayRegistered = false;
 
     @Override
     public void onEnable() {
@@ -65,7 +64,6 @@ public final class Deathmatch extends JavaPlugin {
         countdownDisplay.addEntry("Border");
 
         borderSizeDisplay = scoreboard.registerNewTeam("border size");
-        borderSizeDisplayRegistered = true;
         borderSizeDisplay.addEntry("Border size: ");
 
         timeUntilNextEvent = getConfig().getInt("border.delay");
@@ -198,9 +196,6 @@ public final class Deathmatch extends JavaPlugin {
     }
 
     private void updateBorderSizeDisplay() {
-        if(!borderSizeDisplayRegistered)
-            return;
-
         int size = (int) border.getSize();
         scoreboard.getTeam("border size").setSuffix(size + ", " + size);
     }
@@ -220,12 +215,10 @@ public final class Deathmatch extends JavaPlugin {
             team.unregister();
         }
 
-        stats.unregister();
-
-        borderSizeDisplayRegistered = false;
-
         Bukkit.getServer().getScheduler().cancelTask(delayTask);
         Bukkit.getServer().getScheduler().cancelTask(countdownTask);
+
+        stats.unregister();
 
         alivePlayers.clear();
 
