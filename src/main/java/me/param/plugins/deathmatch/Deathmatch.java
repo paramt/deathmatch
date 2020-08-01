@@ -33,8 +33,8 @@ public final class Deathmatch extends JavaPlugin {
         border = world.getWorldBorder();
 
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective health = scoreboard.registerNewObjective("Health", Criterias.HEALTH, "Health", RenderType.HEARTS);
-        health.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+        scoreboard.registerNewObjective("Health", Criterias.HEALTH, "Health", RenderType.HEARTS)
+                .setDisplaySlot(DisplaySlot.PLAYER_LIST);
 
         getLogger().info("Deathmatch has been enabled!");
         getCommand("deathmatch").setExecutor(new Commands(this));
@@ -72,16 +72,13 @@ public final class Deathmatch extends JavaPlugin {
         stats.getScore("").setScore(2);
         stats.getScore(ChatColor.BOLD + "" + ChatColor.UNDERLINE + "Kills").setScore(1);
 
-        countdownTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-            @Override
-            public void run() {
-                if(timeUntilNextEvent > 0) {
-                    scoreboard.getTeam("countdown").setSuffix(" shrinks in: " + timeUntilNextEvent + "s");
-                    timeUntilNextEvent--;
-                } else {
-                    scoreboard.getTeam("countdown").setSuffix(" is shrinking!");
-                    updateBorderSizeDisplay();
-                }
+        countdownTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            if(timeUntilNextEvent > 0) {
+                scoreboard.getTeam("countdown").setSuffix(" shrinks in: " + timeUntilNextEvent + "s");
+                timeUntilNextEvent--;
+            } else {
+                scoreboard.getTeam("countdown").setSuffix(" is shrinking!");
+                updateBorderSizeDisplay();
             }
         }, 0, 20);
 
@@ -132,13 +129,10 @@ public final class Deathmatch extends JavaPlugin {
             player.setGameMode(GameMode.SURVIVAL);
         }
 
-        delayTask = Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-            @Override
-            public void run() {
-                if(inProgress) {
-                    border.setSize(getConfig().getInt("border.shrink size"), 60*5);
-                    sendTitleToEveryone("", "The border is shrinking!", 10, 60, 10);
-                }
+        delayTask = Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+            if(inProgress) {
+                border.setSize(getConfig().getInt("border.shrink size"), 60*5);
+                sendTitleToEveryone("", "The border is shrinking!", 10, 60, 10);
             }
         }, 20*getConfig().getInt("border.delay"));
     }
