@@ -228,7 +228,7 @@ public final class Deathmatch extends JavaPlugin {
             player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         }
 
-        border.setSize(30000000); // Reset world border
+        border.setSize(getConfig().getInt("border.size")); // Reset world border
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.getInventory().clear();
