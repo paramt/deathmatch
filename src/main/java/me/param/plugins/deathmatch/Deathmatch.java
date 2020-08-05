@@ -131,7 +131,7 @@ public final class Deathmatch extends JavaPlugin {
 
         delayTask = Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             if(inProgress) {
-                border.setSize(getConfig().getInt("border.shrink size"), 60*5);
+                border.setSize(getConfig().getInt("border.shrink size"), getConfig().getInt("border.shrink time"));
                 sendTitleToEveryone("", "The border is shrinking!", 10, 60, 10);
             }
         }, 20*getConfig().getInt("border.delay"));
