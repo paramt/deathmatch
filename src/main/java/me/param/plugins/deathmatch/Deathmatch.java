@@ -26,16 +26,6 @@ public final class Deathmatch extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getConfig().options().copyDefaults(true);
-        saveDefaultConfig();
-
-        world = Bukkit.getWorld("world");
-        border = world.getWorldBorder();
-
-        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        scoreboard.registerNewObjective("Health", Criterias.HEALTH, "Health", RenderType.HEARTS)
-                .setDisplaySlot(DisplaySlot.PLAYER_LIST);
-
         getLogger().info("Deathmatch has been enabled!");
         getCommand("deathmatch").setExecutor(new Commands(this));
         getCommand("deathmatch").setTabCompleter(new CommandsAutocompleter());
@@ -45,6 +35,16 @@ public final class Deathmatch extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnPlayerJoin(this), this);
         getServer().getPluginManager().registerEvents(new OnBreakBlock(this), this);
         getServer().getPluginManager().registerEvents(new OnPlayerHit(), this);
+
+        getConfig().options().copyDefaults(true);
+        saveDefaultConfig();
+
+        world = Bukkit.getWorld("world");
+        border = world.getWorldBorder();
+
+        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        scoreboard.registerNewObjective("Health", Criterias.HEALTH, "Health", RenderType.HEARTS)
+                .setDisplaySlot(DisplaySlot.PLAYER_LIST);
     }
 
     public void start() {
