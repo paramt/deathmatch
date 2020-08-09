@@ -112,7 +112,6 @@ public final class Deathmatch extends JavaPlugin {
         updateBorderSizeDisplay();
 
         for(Player player : Bukkit.getOnlinePlayers()) {
-            // Clear inventory, reset health and food bars, apply 60 seconds of speed and 5 seconds of invincibility
             player.getInventory().clear();
             player.setHealth(20);
             player.setFoodLevel(20);
@@ -122,7 +121,7 @@ public final class Deathmatch extends JavaPlugin {
                 player.removePotionEffect(effect.getType());
 
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 100));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*60, 1));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*getConfig().getInt("start.speed"), 1));
 
             double x = Math.random() * borderSize - borderSize / 2.0;
             double z = Math.random() * borderSize - borderSize / 2.0;

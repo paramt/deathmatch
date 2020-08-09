@@ -4,4 +4,7 @@ border:
   delay: 60
   shrink time: 300
 
+start:
+  speed: 60
+
 minimum players: 2
