@@ -38,7 +38,7 @@ public final class Deathmatch extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnHunger(this), this);
 
         getConfig().options().copyDefaults(true);
-        saveDefaultConfig();
+        saveConfig();
 
         world = Bukkit.getWorld("world");
         border = world.getWorldBorder();
