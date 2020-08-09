@@ -117,6 +117,13 @@ public final class Deathmatch extends JavaPlugin {
             player.setFoodLevel(20);
             player.setSaturation(5);
 
+            if(getConfig().getBoolean("start.tools")) {
+                player.getInventory().addItem(new ItemStack(Material.IRON_SWORD));
+                player.getInventory().addItem(new ItemStack(Material.COBBLESTONE, 64));
+                player.getInventory().addItem(new ItemStack(Material.IRON_PICKAXE));
+                player.getInventory().addItem(new ItemStack(Material.IRON_AXE));
+            }
+
             for(PotionEffect effect : player.getActivePotionEffects())
                 player.removePotionEffect(effect.getType());
 

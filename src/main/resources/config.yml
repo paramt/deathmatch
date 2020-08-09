@@ -6,5 +6,6 @@ border:
 
 start:
   speed: 60
+  tools: false        # Iron sword, axe, pickaxe, stack of blocks
 
 minimum players: 2
