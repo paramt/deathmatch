@@ -75,11 +75,14 @@ public final class Deathmatch extends JavaPlugin {
         countdownTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             if(timeUntilNextEvent > 0) {
                 scoreboard.getTeam("countdown").setSuffix(" shrinks in: " + timeUntilNextEvent + "s");
-                timeUntilNextEvent--;
-            } else {
+            } else if (timeUntilNextEvent > -1 * getConfig().getInt("border.shrink time")){
                 scoreboard.getTeam("countdown").setSuffix(" is shrinking!");
-                updateBorderSizeDisplay();
+            } else {
+                scoreboard.getTeam("countdown").setSuffix(" has shrunk");
             }
+
+            updateBorderSizeDisplay();
+            timeUntilNextEvent--;
         }, 0, 20);
 
         for(int i = 0; i < alivePlayers.size(); i++) {
