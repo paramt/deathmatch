@@ -108,6 +108,7 @@ public final class Deathmatch extends JavaPlugin {
         border.setDamageBuffer(0);
         border.setCenter(0, 0);
         world.setTime(0);
+        world.setStorm(false);
         updateBorderSizeDisplay();
 
         for(Player player : Bukkit.getOnlinePlayers()) {
