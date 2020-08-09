@@ -35,6 +35,7 @@ public final class Deathmatch extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnPlayerJoin(this), this);
         getServer().getPluginManager().registerEvents(new OnBreakBlock(this), this);
         getServer().getPluginManager().registerEvents(new OnPlayerHit(), this);
+        getServer().getPluginManager().registerEvents(new OnHunger(this), this);
 
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();

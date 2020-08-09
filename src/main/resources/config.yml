@@ -7,5 +7,6 @@ border:
 start:
   speed: 60
   tools: false        # Iron sword, axe, pickaxe, stack of blocks
+  hunger: true        # Set to false to disable hunger
 
 minimum players: 2
