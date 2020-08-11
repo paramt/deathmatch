@@ -101,6 +101,7 @@ public final class Deathmatch extends JavaPlugin {
             String playerName = player.getDisplayName();
             Team playerTeam = scoreboard.registerNewTeam(playerName);
 
+            // Add name to scoreboard
             playerTeam.addEntry(playerName + ": ");
             stats.getScore(playerName + ": ").setScore(-i);
             playerTeam.setSuffix("0");
@@ -108,6 +109,7 @@ public final class Deathmatch extends JavaPlugin {
             kills.put(playerName, 0);
             i++;
 
+            // Reset everything
             player.getInventory().clear();
             player.setHealth(20);
             player.setFoodLevel(20);
@@ -190,7 +192,7 @@ public final class Deathmatch extends JavaPlugin {
             stop();
         }
 
-        // Reward the player
+        // Reward the killer
         else if(killer != null) {
             player.teleport(killer.getLocation().add(0, 5, 0));
             killer.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
