@@ -136,10 +136,11 @@ public final class Deathmatch extends JavaPlugin {
             player.setGameMode(GameMode.SURVIVAL);
         }
 
-        Bukkit.broadcastMessage(ChatColor.BOLD + "" + ChatColor.RED + "Deathmatch Rules" +
-                "\n" + ChatColor.RESET + "Gather resources and fend off other players. " +
-                ChatColor.RESET + "Killing a player will give you " + ChatColor.GOLD +
-                "1 Golden Apple. " + ChatColor.RESET + "Last player standing wins!");
+        Bukkit.broadcastMessage(ChatColor.BOLD + "" + ChatColor.RED + "Deathmatch Rules:\n" + ChatColor.RESET +
+                "Gather resources and fend off other players. " + ChatColor.RESET + "You'll start with " +
+                getConfig().getInt("start.speed") + " seconds of " + ChatColor.AQUA + "Speed II" +
+                ChatColor.RESET + ", but you'll lose it if you hit someone. Killing a player will give you a" +
+                ChatColor.GOLD + " Golden Apple. " + ChatColor.RESET + "Last player standing wins!");
 
         delayTask = Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             if(inProgress) {
