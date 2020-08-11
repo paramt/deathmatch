@@ -23,6 +23,7 @@ public final class Deathmatch extends JavaPlugin {
     private Team countdownDisplay, borderSizeDisplay;
 
     private int timeUntilNextEvent, delayTask, countdownTask;
+    private int borderSize = getConfig().getInt("border.size");
 
     @Override
     public void onEnable() {
@@ -86,37 +87,38 @@ public final class Deathmatch extends JavaPlugin {
             timeUntilNextEvent--;
         }, 0, 20);
 
-        for(int i = 0; i < alivePlayers.size(); i++) {
-            Player player = alivePlayers.get(i);
-            String playerName = alivePlayers.get(i).getDisplayName();
+        border.setSize(borderSize);
+        border.setDamageBuffer(0);
+        border.setCenter(0, 0);
+        updateBorderSizeDisplay();
+
+        world.setTime(0);
+        world.setStorm(false);
+
+        int i = 0;
+
+        for(Player player : alivePlayers) {
+            String playerName = player.getDisplayName();
             Team playerTeam = scoreboard.registerNewTeam(playerName);
 
             playerTeam.addEntry(playerName + ": ");
             stats.getScore(playerName + ": ").setScore(-i);
             playerTeam.setSuffix("0");
-
             player.setScoreboard(scoreboard);
             kills.put(playerName, 0);
-        }
+            i++;
 
-        Bukkit.broadcastMessage(ChatColor.BOLD + "" + ChatColor.RED + "Deathmatch Rules" +
-                "\n" + ChatColor.RESET + "Gather resources and fend off other players. " +
-                ChatColor.RESET + "Killing a player will give you " + ChatColor.GOLD +
-                "1 Golden Apple. " + ChatColor.RESET + "Last player standing wins!");
-
-        int borderSize = getConfig().getInt("border.size");
-        border.setSize(borderSize);
-        border.setDamageBuffer(0);
-        border.setCenter(0, 0);
-        world.setTime(0);
-        world.setStorm(false);
-        updateBorderSizeDisplay();
-
-        for(Player player : Bukkit.getOnlinePlayers()) {
             player.getInventory().clear();
             player.setHealth(20);
             player.setFoodLevel(20);
             player.setSaturation(5);
+
+            for(PotionEffect effect : player.getActivePotionEffects())
+                player.removePotionEffect(effect.getType());
+
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 100));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*getConfig().getInt("start.speed"), 1));
+
 
             if(getConfig().getBoolean("start.tools")) {
                 player.getInventory().addItem(new ItemStack(Material.IRON_SWORD));
@@ -124,12 +126,6 @@ public final class Deathmatch extends JavaPlugin {
                 player.getInventory().addItem(new ItemStack(Material.IRON_PICKAXE));
                 player.getInventory().addItem(new ItemStack(Material.IRON_AXE));
             }
-
-            for(PotionEffect effect : player.getActivePotionEffects())
-                player.removePotionEffect(effect.getType());
-
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*5, 100));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*getConfig().getInt("start.speed"), 1));
 
             double x = Math.random() * borderSize - borderSize / 2.0;
             double z = Math.random() * borderSize - borderSize / 2.0;
@@ -139,6 +135,11 @@ public final class Deathmatch extends JavaPlugin {
             player.sendTitle(ChatColor.RED + "Deathmatch", "", 10, 60, 10);
             player.setGameMode(GameMode.SURVIVAL);
         }
+
+        Bukkit.broadcastMessage(ChatColor.BOLD + "" + ChatColor.RED + "Deathmatch Rules" +
+                "\n" + ChatColor.RESET + "Gather resources and fend off other players. " +
+                ChatColor.RESET + "Killing a player will give you " + ChatColor.GOLD +
+                "1 Golden Apple. " + ChatColor.RESET + "Last player standing wins!");
 
         delayTask = Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             if(inProgress) {
