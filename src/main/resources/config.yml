@@ -1,12 +1,12 @@
 border:
-  size: 200
-  shrink size: 10
-  delay: 60
-  shrink time: 300
+  size: 200           # Initial border width
+  shrink size: 10     # Ending border width
+  delay: 60           # Time until border starts shrinking
+  shrink time: 300    # Time it takes for border to shrink
 
 start:
-  speed: 60
-  tools: false        # Iron sword, axe, pickaxe, stack of blocks
+  speed: 60           # Time speed effect lasts
+  tools: false        # Spawn with iron sword, axe, pickaxe, stack of blocks
   hunger: true        # Set to false to disable hunger
 
 minimum players: 2
